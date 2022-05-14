@@ -1,0 +1,10 @@
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  tr th,
+  td {
+    padding: 4px;
+    border: 1px solid gray;
+  }
+}

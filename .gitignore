@@ -1,0 +1,25 @@
+*.svn
+*.iml
+*.gradle
+*.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.local
+*.DS_Store
+*.log
+*/build
+dist/
+node_modules
+*.xcworkspace
+*/Podfile.lock
+*/Pods
+*/build.xcconfig
+*/ExportOptions.plist
+*/ProvisionFile.plist
+Web Code
+Web Note
+arcgis-video
+axios-ts
