@@ -1,11 +1,11 @@
-import Menu from "./Menu";
+import Menu, { MenuProps } from "./Menu";
+import SubMenu, { SubMenuProps } from "./SubMenu";
+import MenuItem, { MenuItemProps } from "./MenuItem";
+import { FC } from "react";
 
-export default Menu
+export type IMenuComponent = FC<MenuProps> & { SubMenu: FC<SubMenuProps>, MenuItem: FC<MenuItemProps> }
+const TransMenu = Menu as IMenuComponent
+TransMenu.SubMenu = SubMenu
+TransMenu.MenuItem = MenuItem
 
-
-
-
-/*
-bug list:
- disabled MenuItem style dont'work
-*/
+export default TransMenu
