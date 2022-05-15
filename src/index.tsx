@@ -1,7 +1,6 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 library.add(fas)
-import React from 'react'
 
 export { default as Button } from './components/Button'
 export { default as Menu } from './components/Menu'
