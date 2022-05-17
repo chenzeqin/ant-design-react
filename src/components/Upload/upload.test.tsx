@@ -1,13 +1,7 @@
-import React from 'react';
-import {
-  cleanup,
-  fireEvent,
-  render,
-  RenderResult,
-  createEvent,
-  waitFor,
-} from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import axios from 'axios';
+import Upload, { UploadProps } from './Upload';
+
 jest.mock('axios');
 
 const mockAxios = axios as jest.Mocked<typeof axios>;
@@ -22,7 +16,6 @@ jest.mock('../Icon', () => {
   };
 });
 
-import Upload, { UploadProps } from './Upload';
 const testProps: UploadProps = {
   action: 'fake.com',
   onSuccess: jest.fn(),
@@ -31,15 +24,21 @@ const testProps: UploadProps = {
   drag: true,
 };
 const testFile = new File(['ccc'], 'test.png', { type: 'image/png' });
-let wrapper: RenderResult, fileInput: HTMLInputElement, uploadArea: HTMLElement;
+
+const setup = () => {
+  render(<Upload {...testProps}>click to upload</Upload>);
+  const fileInput = screen.getByTestId('test-input');
+  const uploadArea = screen.getByText('click to upload');
+  return {
+    // view,
+    fileInput,
+    uploadArea,
+  };
+};
 describe('upload component', () => {
-  beforeEach(() => {
-    wrapper = render(<Upload {...testProps}>click to upload</Upload>);
-    fileInput = wrapper.container.querySelector('input')!;
-    uploadArea = wrapper.queryByText('click to upload')!;
-  });
+  beforeEach(() => {});
   it('upload should work', async () => {
-    const { queryByText } = wrapper;
+    const { fileInput, uploadArea } = setup();
     expect(fileInput).not.toBeVisible();
     expect(uploadArea).toBeInTheDocument();
     const users = [{ name: 'Bob' }];
@@ -54,17 +53,17 @@ describe('upload component', () => {
     // upload file
     fireEvent.change(fileInput, { target: { files: [testFile] } });
     // loading 开始出现 图标mock为了图标名称spinner
-    expect(queryByText('spinner')).toBeInTheDocument();
+    expect(screen.getByText('spinner')).toBeInTheDocument();
     await waitFor(() => {
-      expect(queryByText('test.png')).toBeInTheDocument();
-      expect(queryByText('check-circle')).toBeInTheDocument();
+      expect(screen.getByText('check-circle')).toBeInTheDocument();
     });
+    expect(screen.getByText('test.png')).toBeInTheDocument();
     expect(testProps.onSuccess).toHaveBeenCalledWith(resp, testFile);
     expect(testProps.onChange).toHaveBeenCalledWith(testFile);
 
     // remove file
-    expect(queryByText('times')).toBeInTheDocument();
-    fireEvent.click(queryByText('times')!);
+    expect(screen.getByText('times')).toBeInTheDocument();
+    fireEvent.click(screen.getByText('times')!);
     //  toBeCalledWith + objectContaining: 判断对象包含某些属性
     expect(testProps.onRemove).toBeCalledWith(
       expect.objectContaining({
@@ -75,7 +74,7 @@ describe('upload component', () => {
     );
   });
   it('drag and drop files should work', async () => {
-    const { queryByText } = wrapper;
+    const { uploadArea } = setup();
     fireEvent.dragOver(uploadArea);
     expect(uploadArea).toHaveClass('is-dragover');
     fireEvent.dragLeave(uploadArea);
@@ -87,9 +86,9 @@ describe('upload component', () => {
     fireEvent.drop(uploadArea, { dataTransfer: { files: [testFile] } });
 
     await waitFor(() => {
-      expect(queryByText('test.png')).toBeInTheDocument();
-      expect(queryByText('check-circle')).toBeInTheDocument();
+      expect(screen.getByText('check-circle')).toBeInTheDocument();
     });
+    expect(screen.getByText('test.png')).toBeInTheDocument();
     expect(testProps.onSuccess).toHaveBeenCalledWith(resp, testFile);
     expect(testProps.onChange).toHaveBeenCalledWith(testFile);
   });

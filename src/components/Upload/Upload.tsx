@@ -182,6 +182,7 @@ const Upload: React.FC<UploadProps> = (props) => {
         {drag ? <Dragger onFile={uploadFiles}>{children}</Dragger> : children}
         <input
           className="viking-file-input"
+          data-testid="test-input"
           style={{ display: 'none' }}
           ref={fileInput}
           onChange={handleFileChange}

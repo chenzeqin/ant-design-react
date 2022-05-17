@@ -10,6 +10,6 @@ export var useDebounce = function (value, delay) {
         return function () {
             clearTimeout(handler);
         };
-    }, [value]);
+    }, [value, delay]);
     return debounceValue;
 };

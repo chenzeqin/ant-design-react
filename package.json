@@ -1,6 +1,6 @@
 {
   "name": "chenzeqin-design-ui",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "description": "React UI Library",
   "author": "chenzeqn",
@@ -28,7 +28,6 @@
     "@fortawesome/react-fontawesome": "^0.1.18",
     "axios": "^0.27.2",
     "classnames": "^2.3.1",
-  
     "react-transition-group": "^4.3.0"
   },
   "peerDependencies": {
@@ -39,6 +38,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test-no-watcher": "cross-env CI=true react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
@@ -46,7 +46,9 @@
     "build-ts": "tsc -p tsconfig.build.json",
     "build-css": "node-sass ./src/styles/index.scss ./dist/index.css",
     "build-lib": "npm run clean && npm run build-ts && npm run build-css",
-    "prepublish": "npm run build-lib"
+    "prepublish": "npm run test-no-watcher && npm run lint && npm run build-lib",
+    "lint": "eslint --ext js,ts,tsx src --max-warning 0",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
@@ -97,13 +99,15 @@
     "@types/react": "^18.0.5",
     "@types/react-dom": "^18.0.1",
     "@types/react-transition-group": "^4.2.3",
-    "typescript": "^4.6.3",
-    "react-scripts": "5.0.1",
+    "cross-env": "^7.0.3",
+    "husky": "^8.0.0",
+    "node-sass": "^7.0.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "web-vitals": "^2.1.4",
-    "node-sass": "^7.0.1",
+    "react-scripts": "5.0.1",
     "rimraf": "^3.0.2",
+    "typescript": "^4.6.3",
+    "web-vitals": "^2.1.4",
     "webpack": "^5.72.0"
   }
 }

@@ -1,4 +1,4 @@
-import { createRef, KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { KeyboardEvent, useEffect, useRef, useState } from 'react';
 import React, { ChangeEvent, ReactElement } from 'react';
 import Input, { InputProps } from '../Input/Input';
 import Transition from '../Transition/index';

@@ -1,20 +1,24 @@
-import React from 'react';
 import {
-  cleanup,
   fireEvent,
   render,
-  RenderResult,
+  screen,
   waitFor,
 } from '@testing-library/react';
+import { config } from 'react-transition-group';
+
+import Menu, { MenuProps } from './Menu';
+import MenuItem from './MenuItem';
+import SubMenu from './SubMenu';
+
 // TODO: 使用jest.mock 模拟icon组件
 // import { library } from '@fortawesome/fontawesome-svg-core'
 // import { fas } from '@fortawesome/free-solid-svg-icons'
 // library.add(fas)
 jest.mock('../Icon', () => {
   return () => {
-    return <i className="fa" />
-  }
-})
+    return <i className="fa" />;
+  };
+});
 // TODO: 使用jest.mock 模拟react-transition-group组件
 // jest.mock('react-transition-group', () => {
 //   return {
@@ -24,12 +28,7 @@ jest.mock('../Icon', () => {
 //   }
 // })
 // 貌似没有用，还是需要 waitFor
-import { config } from 'react-transition-group'
-config.disabled = true
-
-import Menu, { MenuProps } from './Menu';
-import MenuItem from './MenuItem';
-import SubMenu from './SubMenu';
+config.disabled = true;
 
 const defaultProps: MenuProps = {
   defaultIndex: '0',
@@ -71,32 +70,39 @@ const getMenu = (props: MenuProps) => {
     </Menu>
   );
 };
-let wrapper: RenderResult,
-  menuElement: HTMLElement,
-  disabledElement: HTMLElement,
-  activeElement: HTMLElement;
+
+const setUp = () => {
+  const view = render(getMenu(defaultProps));
+  const menuElement = screen.getByTestId('test-menu');
+  const disabledElement = screen.getByText('disabled');
+  const activeElement = screen.getByText('active');
+  // insert css file
+  document.body.append(createStyleFile());
+  return {
+    view,
+    menuElement,
+    disabledElement,
+    activeElement,
+  };
+};
 describe('test menu component', () => {
-  beforeEach(() => {
-    wrapper = render(getMenu(defaultProps));
-    // insert css file
-    wrapper.container.append(createStyleFile());
-    menuElement = wrapper.getByTestId('test-menu');
-    disabledElement = wrapper.getByText('disabled');
-    activeElement = wrapper.getByText('active');
-  });
+  // beforeEach(() => {
+  // });
   it('should render correct Menu and MenuItem with default props', () => {
+    const { menuElement, disabledElement, activeElement } = setUp();
     expect(menuElement).toBeInTheDocument();
     expect(menuElement).toHaveClass('viking-menu');
     expect(menuElement).toHaveClass('test-menu');
     // expect(menuElement.getElementsByTagName('li').length).toEqual(7);
     // :scope 代表element本身
-    expect(menuElement.querySelectorAll(':scope > li').length).toEqual(4);
+    // expect(menuElement.querySelectorAll(':scope > li').length).toEqual(4); // eslint 告警
     expect(activeElement).toHaveClass('menu-item is-active');
     expect(disabledElement).toHaveClass('menu-item is-disabled');
   });
   it('click item should change action and call the correct callback', () => {
+    const { disabledElement } = setUp();
     // 第三个菜单未激活
-    const thirdMenu = wrapper.getByText('menu3');
+    const thirdMenu = screen.getByText('menu3');
     fireEvent.click(thirdMenu);
     expect(thirdMenu).toHaveClass('menu-item is-active');
     expect(defaultProps.onSelect).toHaveBeenCalledWith('2');
@@ -106,25 +112,26 @@ describe('test menu component', () => {
     expect(defaultProps.onSelect).not.toHaveBeenLastCalledWith('1');
   });
   it('test submenu', async () => {
-    const drop1 = wrapper.queryByText('drop1');
+  setUp();
+    const drop1 = screen.queryByText('drop1');
     // 注意：如果是toBeVisible(),需要在上面插入样式，这里才有效果
     // 现在因为是 包在过渡组件中，所以修改成toBeInTheDocument
     expect(drop1).not.toBeInTheDocument();
-    const dropdownEle = wrapper.getByText('dropdown');
+    const dropdownEle = screen.getByText('dropdown');
     fireEvent.mouseEnter(dropdownEle);
     await waitFor(() => {
-      expect(wrapper.queryByText('drop1')).toBeInTheDocument()
+      expect(screen.getByText('drop1')).toBeInTheDocument();
     });
-    fireEvent.mouseLeave(dropdownEle)
-    await waitFor(()=>{
-      expect(wrapper.queryByText('drop1')).not.toBeInTheDocument()
-    })
+    fireEvent.mouseLeave(dropdownEle);
+    await waitFor(() => {
+      expect(screen.queryByText('drop1')).not.toBeInTheDocument();
+    });
   });
   it('should render vertical menu', () => {
     // 清除beforeEach 生成的case
-    cleanup();
-    const wrapper = render(getMenu(verticalModeMenu));
-    const verticalMenu = wrapper.getByTestId('test-menu');
+    // cleanup(); 不推荐使用
+    render(getMenu(verticalModeMenu));
+    const verticalMenu = screen.getByTestId('test-menu');
     expect(verticalMenu).toHaveClass('menu-vertical');
   });
 });

@@ -1,5 +1,3 @@
-import React, { ChangeEvent, useState } from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { storiesOf } from '@storybook/react';
 import AutoComplete, { DataSourceType } from './AutoComplete';
 import axios from 'axios';

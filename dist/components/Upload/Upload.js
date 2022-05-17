@@ -137,7 +137,7 @@ var Upload = function (props) {
         });
         onRemove && onRemove(uploadFile);
     };
-    return (_jsxs("div", __assign({ className: "viking-upload-component" }, { children: [_jsxs("div", __assign({ className: "viking-upload-input", style: { display: 'inline-block' }, onClick: handleClick }, { children: [drag ? _jsx(Dragger, __assign({ onFile: uploadFiles }, { children: children })) : children, _jsx("input", { className: "viking-file-input", style: { display: 'none' }, ref: fileInput, onChange: handleFileChange, type: "file", accept: accept, multiple: multiple })] })), _jsx(UploadList, { fileList: fileList, onRemove: handleRemove })] })));
+    return (_jsxs("div", __assign({ className: "viking-upload-component" }, { children: [_jsxs("div", __assign({ className: "viking-upload-input", style: { display: 'inline-block' }, onClick: handleClick }, { children: [drag ? _jsx(Dragger, __assign({ onFile: uploadFiles }, { children: children })) : children, _jsx("input", { className: "viking-file-input", "data-testid": "test-input", style: { display: 'none' }, ref: fileInput, onChange: handleFileChange, type: "file", accept: accept, multiple: multiple })] })), _jsx(UploadList, { fileList: fileList, onRemove: handleRemove })] })));
 };
 Upload.defaultProps = {
     name: 'file',
