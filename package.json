@@ -47,7 +47,7 @@
     "build-css": "node-sass ./src/styles/index.scss ./dist/index.css",
     "build-lib": "npm run clean && npm run build-ts && npm run build-css",
     "prepublish": "npm run test-no-watcher && npm run lint && npm run build-lib",
-    "lint": "eslint --ext js,ts,tsx src --max-warning 0",
+    "lint": "eslint --ext js,ts,tsx src --max-warnings 10",
     "prepare": "husky install"
   },
   "eslintConfig": {
