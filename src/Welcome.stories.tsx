@@ -6,7 +6,7 @@ storiesOf('welcome', module).add(
     return (
       <>
         <h1>欢迎</h1>
-        <a href="#">代码仓库</a>
+        <a href="https://github.com/chenzeqin/ant-design-ui">代码仓库</a>
         <p>安装试试： npm i chenzeqin-design-ui --save</p>
       </>
     );
